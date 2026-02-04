@@ -1,0 +1,27 @@
+# ninja log v6
+28	456	7919263155984828	Timer_autogen/timestamp	f8eec0c8e1189c06
+457	2544	7919263156659875	CMakeFiles/Timer.dir/Timer_autogen/mocs_compilation.cpp.obj	4de94891d695069a
+28	456	7919263155984828	Timer_autogen/mocs_compilation.cpp	f8eec0c8e1189c06
+28	456	7919263155984828	D:/projects/Timer/Timer/build/Desktop_Qt_6_10_2_MinGW_64_bit-Debug/Timer_autogen/timestamp	f8eec0c8e1189c06
+460	2543	7919263156699718	CMakeFiles/Timer.dir/main.cpp.obj	caba799792923696
+28	456	7919263155984828	D:/projects/Timer/Timer/build/Desktop_Qt_6_10_2_MinGW_64_bit-Debug/Timer_autogen/mocs_compilation.cpp	f8eec0c8e1189c06
+2250	2410	7919260724748307	Timer.exe	4be163f372ad499c
+187	2250	7919260704119020	CMakeFiles/Timer.dir/mainwindow.cpp.obj	6e7ea13f9e436280
+32	567	7919263507804922	Timer_autogen/timestamp	f8eec0c8e1189c06
+32	567	7919263507804922	Timer_autogen/mocs_compilation.cpp	f8eec0c8e1189c06
+32	567	7919263507804922	D:/projects/Timer/Timer/build/Desktop_Qt_6_10_2_MinGW_64_bit-Debug/Timer_autogen/timestamp	f8eec0c8e1189c06
+32	567	7919263507804922	D:/projects/Timer/Timer/build/Desktop_Qt_6_10_2_MinGW_64_bit-Debug/Timer_autogen/mocs_compilation.cpp	f8eec0c8e1189c06
+568	2850	7919263508740346	CMakeFiles/Timer.dir/Timer_autogen/mocs_compilation.cpp.obj	4de94891d695069a
+571	2874	7919263508776004	CMakeFiles/Timer.dir/main.cpp.obj	caba799792923696
+27	160	7919263853614899	Timer_autogen/timestamp	f8eec0c8e1189c06
+27	160	7919263853614899	Timer_autogen/mocs_compilation.cpp	f8eec0c8e1189c06
+27	160	7919263853614899	D:/projects/Timer/Timer/build/Desktop_Qt_6_10_2_MinGW_64_bit-Debug/Timer_autogen/timestamp	f8eec0c8e1189c06
+27	160	7919263853614899	D:/projects/Timer/Timer/build/Desktop_Qt_6_10_2_MinGW_64_bit-Debug/Timer_autogen/mocs_compilation.cpp	f8eec0c8e1189c06
+31	501	7919264230949236	Timer_autogen/timestamp	f8eec0c8e1189c06
+31	501	7919264230949236	Timer_autogen/mocs_compilation.cpp	f8eec0c8e1189c06
+31	501	7919264230949236	D:/projects/Timer/Timer/build/Desktop_Qt_6_10_2_MinGW_64_bit-Debug/Timer_autogen/timestamp	f8eec0c8e1189c06
+31	501	7919264230949236	D:/projects/Timer/Timer/build/Desktop_Qt_6_10_2_MinGW_64_bit-Debug/Timer_autogen/mocs_compilation.cpp	f8eec0c8e1189c06
+505	2831	7919264231693721	CMakeFiles/Timer.dir/main.cpp.obj	caba799792923696
+502	2848	7919264231653257	CMakeFiles/Timer.dir/Timer_autogen/mocs_compilation.cpp.obj	4de94891d695069a
+509	2886	7919264231718956	CMakeFiles/Timer.dir/mainwindow.cpp.obj	6e7ea13f9e436280
+2886	3052	7919264255502337	Timer.exe	4be163f372ad499c
