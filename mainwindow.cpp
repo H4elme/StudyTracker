@@ -25,11 +25,6 @@ MainWindow::MainWindow(QWidget *parent)
     minutes->setWrapping(true);
     hours->setWrapping(true);
 
-    seconds->setValue(5);
-    minutes->setValue(5);
-    hours->setValue(1);
-    qDebug() << (seconds->text()).toInt();
-
     top->addWidget(hours);
     top->addWidget(minutes);
     top->addWidget(seconds);
@@ -50,30 +45,17 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow() {}
 
-bool MainWindow::decrease(QSpinBox *spinBox) {
-    int num = (spinBox->text()).toInt();
-    if (!num) return false;
-    spinBox->setValue(--num);
-    return true;
-}
-
 void MainWindow::update() {
-    if (!decrease(seconds)) {
-        if (!decrease(minutes)) {
-            if (!decrease(hours)) {
-                // stop timer
-            }
-            else {
-                minutes->setValue(59);
-                seconds->setValue(59);
-            }
-        }
-        else {
-            seconds->setValue(59);
-        }
+    if (totalSeconds) {
+        qDebug() << totalSeconds;
+        totalSeconds--;
+        hours->setValue(totalSeconds / 3600);
+        minutes->setValue((totalSeconds % 3600) / 60);
+        seconds->setValue((totalSeconds % 3600) % 60);
     }
 }
 
 void MainWindow::startMyTimer() {
+    totalSeconds = hours->text().toInt() * 3600 + minutes->text().toInt() * 60 + seconds->text().toInt();
     timer->start(1000);
 }

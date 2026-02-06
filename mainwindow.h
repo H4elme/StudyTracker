@@ -20,5 +20,6 @@ private:
     QSpinBox *minutes;
     QSpinBox *hours;
     QTimer *timer;
+    int totalSeconds = 0;
 };
 #endif // MAINWINDOW_H
