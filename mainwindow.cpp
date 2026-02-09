@@ -16,10 +16,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     auto outer = new QVBoxLayout(this);
     auto inputPage = new QWidget();
-    auto timerPage = new QWidget();
-
-    auto inputLayout = new QHBoxLayout(inputPage);
-    auto timerLayout = new QVBoxLayout(timerPage);
+    auto inputLayout = new QVBoxLayout(inputPage);
+    auto inputInnerLayout = new QHBoxLayout();
 
     seconds = new QSpinBox();
     minutes = new QSpinBox();
@@ -32,11 +30,15 @@ MainWindow::MainWindow(QWidget *parent)
     minutes->setWrapping(true);
     hours->setWrapping(true);
 
-    inputLayout->addWidget(hours);
-    inputLayout->addWidget(minutes);
-    inputLayout->addWidget(seconds);
-
     auto startButton = new QPushButton("START");
+
+    inputInnerLayout->addWidget(hours);
+    inputInnerLayout->addWidget(minutes);
+    inputInnerLayout->addWidget(seconds);
+
+    inputLayout->addLayout(inputInnerLayout);
+    inputLayout->addWidget(startButton);
+
 
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout,
@@ -46,28 +48,30 @@ MainWindow::MainWindow(QWidget *parent)
             this, &MainWindow::startMyTimer);
 
 
-    timerLabel = new QLabel();
-
-    timerLabel->setAlignment(Qt::AlignCenter);
-    // move styles to .qss files later?
-    QFont font = timerLabel->font();
-    font.setFamily("Helvetica");
-    font.setPointSize(12);
-    font.setBold(true);
-    timerLabel->setFont(font);
-
-    progressBar = new QProgressBar(this);
-    progressBar->setTextVisible(false);
-    timerLayout->addWidget(timerLabel);
-    timerLayout->addWidget(progressBar);
-
     // add a class for second page. there just change the pause/continue button, keep everything else the same.
     stackedWidget = new QStackedWidget(this);
 
+    activePage = new TimerPage(this);
+    pausedPage = new TimerPage(this, false);
+
+    connect(activePage->stopButton, &QPushButton::pressed,
+            this, &MainWindow::stopMyTimer);
+
+    connect(pausedPage->stopButton, &QPushButton::pressed,
+            this, &MainWindow::stopMyTimer);
+
+    connect(pausedPage->mainButton, &QPushButton::pressed,
+            this, &MainWindow::continueMyTimer);
+
+    connect(activePage->mainButton, &QPushButton::pressed,
+            this, &MainWindow::pauseMyTimer);
+
+
     stackedWidget->addWidget(inputPage);
-    stackedWidget->addWidget(timerPage);
+    stackedWidget->addWidget(activePage);
+    stackedWidget->addWidget(pausedPage);
+
     outer->addWidget(stackedWidget);
-    outer->addWidget(startButton);
     this->setLayout(outer);
 }
 
@@ -82,7 +86,8 @@ void MainWindow::updateTimerLabel() {
                       .arg(curHours, 2, 10, QChar('0'))
                       .arg(curMinutes, 2, 10, QChar('0'))
                       .arg(curSeconds, 2, 10, QChar('0'));
-    timerLabel->setText(str);
+    activePage->timerLabel->setText(str);
+    pausedPage->timerLabel->setText(str);
 }
 
 void MainWindow::update() {
@@ -90,7 +95,8 @@ void MainWindow::update() {
         qDebug() << totalSeconds;
         totalSeconds--;
         updateTimerLabel();
-        progressBar->setValue(totalSeconds);
+        activePage->progressBar->setValue(totalSeconds);
+        pausedPage->progressBar->setValue(totalSeconds);
     }
     else {
         stackedWidget->setCurrentIndex(0);
@@ -101,11 +107,24 @@ void MainWindow::startMyTimer() {
     totalSeconds = hours->text().toInt() * 3600 + minutes->text().toInt() * 60 + seconds->text().toInt();
     stackedWidget->setCurrentIndex(1);
     updateTimerLabel();
-    progressBar->setRange(0, totalSeconds);
-    progressBar->setValue(totalSeconds);
+    activePage->progressBar->setRange(0, totalSeconds);
+    pausedPage->progressBar->setRange(0, totalSeconds);
+    activePage->progressBar->setValue(totalSeconds);
+    pausedPage->progressBar->setValue(totalSeconds);
+    timer->start(1000);
+}
+
+void MainWindow::continueMyTimer() {
+    stackedWidget->setCurrentIndex(1);
     timer->start(1000);
 }
 
 void MainWindow::pauseMyTimer() {
+    timer->stop();
+    stackedWidget->setCurrentIndex(2);
+}
 
+void MainWindow::stopMyTimer() {
+    timer->stop();
+    stackedWidget->setCurrentIndex(0);
 }
