@@ -22,6 +22,8 @@ public:
     void stopMyTimer();
     void continueMyTimer();
     void updateTimerLabel();
+    void initDatabase();
+    void createTable();
     ~MainWindow();
 private:
     QSpinBox *seconds;

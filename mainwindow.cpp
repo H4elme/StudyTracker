@@ -8,6 +8,9 @@
 #include <QProgressBar>
 #include <QStackedWidget>
 #include <QLabel>
+#include <QSqlDatabase>
+#include <QSqlError>
+#include <QSqlQuery>
 
 MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent)
@@ -48,7 +51,6 @@ MainWindow::MainWindow(QWidget *parent)
             this, &MainWindow::startMyTimer);
 
 
-    // add a class for second page. there just change the pause/continue button, keep everything else the same.
     stackedWidget = new QStackedWidget(this);
 
     activePage = new TimerPage(this);
@@ -127,4 +129,31 @@ void MainWindow::pauseMyTimer() {
 void MainWindow::stopMyTimer() {
     timer->stop();
     stackedWidget->setCurrentIndex(0);
+}
+
+void MainWindow::initDatabase() {
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+
+    db.setDatabaseName("study_tracker.db");
+
+    if (!db.open()) {
+        qDebug() << "Error: can't connect to the database: " << db.lastError().text() << '\n';
+    }
+    else {
+        qDebug() << "Connected.\n";
+        createTable();
+    }
+}
+
+void MainWindow::createTable() {
+    QSqlQuery query;
+    QString qry = "CREATE TABLE IF NOT EXISTS session ("
+    "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+    "type TEXT,"
+    "duration INTEGER,"
+    "start_time TEXT DEFAULT (datetime('now', 'localtime'))"
+");";
+    if (!query.exec(qry)) {
+        qDebug() << "Error: can't create the table: " << query.lastError().text() << '\n';
+    }
 }
