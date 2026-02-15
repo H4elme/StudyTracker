@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "historytab.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QSpinBox>
@@ -11,11 +12,17 @@
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
+#include <QTabWidget>
 
 MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent)
 {
+    initDatabase();
     this->resize(720, 720);
+    auto tabs = new QTabWidget(this);
+
+    auto timerTab = new QWidget(this);
+    historyTab = new HistoryTab(this);
 
     auto outer = new QVBoxLayout(this);
     auto inputPage = new QWidget();
@@ -74,7 +81,12 @@ MainWindow::MainWindow(QWidget *parent)
     stackedWidget->addWidget(pausedPage);
 
     outer->addWidget(stackedWidget);
-    this->setLayout(outer);
+    timerTab->setLayout(outer);
+    tabs->addTab(timerTab, "Timer");
+    tabs->addTab(historyTab, "History");
+    tabs->resize(720, 720);
+    connect(this, &MainWindow::timerStopped,
+            historyTab, &HistoryTab::refreshDB);
 }
 
 MainWindow::~MainWindow() {}
@@ -131,6 +143,7 @@ void MainWindow::stopMyTimer() {
     timer->stop();
     stackedWidget->setCurrentIndex(0);
     insertSession("Work", initialSeconds - totalSeconds);
+    emit timerStopped();
 }
 
 void MainWindow::initDatabase() {

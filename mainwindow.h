@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include "mytimerpage.h"
+#include "historytab.h"
 #include <QWidget>
 #include <QSpinBox>
 #include <QTimer>
@@ -36,7 +37,12 @@ private:
     TimerPage *activePage;
     TimerPage *pausedPage;
 
+    HistoryTab *historyTab;
+
     int totalSeconds = 0;
     int initialSeconds = 0;
+
+signals:
+    void timerStopped();
 };
 #endif // MAINWINDOW_H
