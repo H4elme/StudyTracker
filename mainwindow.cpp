@@ -101,12 +101,13 @@ void MainWindow::update() {
         pausedPage->progressBar->setValue(totalSeconds);
     }
     else {
-        stackedWidget->setCurrentIndex(0);
+        stopMyTimer();
     }
 }
 
 void MainWindow::startMyTimer() {
     totalSeconds = hours->text().toInt() * 3600 + minutes->text().toInt() * 60 + seconds->text().toInt();
+    initialSeconds = totalSeconds;
     stackedWidget->setCurrentIndex(1);
     updateTimerLabel();
     activePage->progressBar->setRange(0, totalSeconds);
@@ -129,6 +130,7 @@ void MainWindow::pauseMyTimer() {
 void MainWindow::stopMyTimer() {
     timer->stop();
     stackedWidget->setCurrentIndex(0);
+    insertSession("Work", initialSeconds - totalSeconds);
 }
 
 void MainWindow::initDatabase() {
@@ -147,13 +149,26 @@ void MainWindow::initDatabase() {
 
 void MainWindow::createTable() {
     QSqlQuery query;
-    QString qry = "CREATE TABLE IF NOT EXISTS session ("
-    "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-    "type TEXT,"
-    "duration INTEGER,"
-    "start_time TEXT DEFAULT (datetime('now', 'localtime'))"
-");";
-    if (!query.exec(qry)) {
+    query.exec("DROP TABLE session;");
+    QString queryStr = "CREATE TABLE IF NOT EXISTS sessions ("
+        "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+        "type TEXT,"
+        "duration INTEGER,"
+        "start_time TEXT DEFAULT (datetime('now', 'localtime'))"
+    ");";
+    if (!query.exec(queryStr)) {
         qDebug() << "Error: can't create the table: " << query.lastError().text() << '\n';
+    }
+}
+
+void MainWindow::insertSession(QString type, int duration) {
+    QSqlQuery query;
+    qDebug() << type << ' ' << duration << '\n';
+    QString queryStr = QString("INSERT INTO sessions (type, duration)"
+                               "VALUES ('%1', %2);")
+                           .arg(type)
+                           .arg(duration);
+    if (!query.exec(queryStr)) {
+        qDebug() << "Error: can't insert: " << query.lastError().text() << '\n';
     }
 }

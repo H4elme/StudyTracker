@@ -24,6 +24,7 @@ public:
     void updateTimerLabel();
     void initDatabase();
     void createTable();
+    void insertSession(QString, int);
     ~MainWindow();
 private:
     QSpinBox *seconds;
@@ -36,5 +37,6 @@ private:
     TimerPage *pausedPage;
 
     int totalSeconds = 0;
+    int initialSeconds = 0;
 };
 #endif // MAINWINDOW_H
