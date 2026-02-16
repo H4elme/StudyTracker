@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QSqlTableModel>
+#include <QDateEdit>
 
 class HistoryTab : public QWidget
 {
@@ -10,8 +11,11 @@ class HistoryTab : public QWidget
 public:
     explicit HistoryTab(QWidget *parent = nullptr);
     void refreshDB();
+    void filter();
+    void resetFilter();
 private:
     QSqlTableModel *model;
+    QDateEdit *startDate, *endDate;
 };
 
 class FormattedModel : public QSqlTableModel {

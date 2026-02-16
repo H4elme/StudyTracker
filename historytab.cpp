@@ -4,10 +4,18 @@
 #include <QTableView>
 #include <QSqlQuery>
 #include <QHeaderView>
+#include <QPushButton>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 HistoryTab::HistoryTab(QWidget *parent) {
+
+    auto panel = new QHBoxLayout();
+    auto layout = new QVBoxLayout(this);
+
     model = new FormattedModel(this);
     model->setTable("sessions");
+    model->sort(3, Qt::SortOrder::DescendingOrder);
     model->select();
     model->setHeaderData(2, Qt::Horizontal, "Duration");
     model->setHeaderData(3, Qt::Horizontal, "Start");
@@ -17,12 +25,34 @@ HistoryTab::HistoryTab(QWidget *parent) {
     view->resize(720, 720);
     view->hideColumn(0);
     view->hideColumn(1);
-    view->show();
+
+    startDate = new QDateEdit(QDate::currentDate(), this);
+    startDate->setCalendarPopup(true);
+    startDate->setButtonSymbols(QAbstractSpinBox::NoButtons);
+    endDate = new QDateEdit(QDate::currentDate(), this);
+    endDate->setCalendarPopup(true);
+    endDate->setButtonSymbols(QAbstractSpinBox::NoButtons);
+
+    auto filterButton = new QPushButton("Filter");
+    auto resetButton = new QPushButton("Reset");
+
+    panel->addWidget(startDate);
+    panel->addWidget(endDate);
+    panel->addWidget(filterButton);
+    panel->addWidget(resetButton);
+    layout->addLayout(panel);
+    layout->addWidget(view);
+
+    this->setLayout(layout);
 
     QHeaderView *header = view->horizontalHeader();
     header->setSectionResizeMode(QHeaderView::ResizeToContents);
 
-    refreshDB();
+    connect(filterButton, &QPushButton::pressed,
+            this, &HistoryTab::filter);
+
+    connect(resetButton, &QPushButton::pressed,
+            this, &HistoryTab::resetFilter);
 }
 
 void HistoryTab::refreshDB() {
@@ -58,3 +88,21 @@ QVariant FormattedModel::data(const QModelIndex &idx, int role) const {
     }
     return QSqlTableModel::data(idx, role);
 };
+
+
+void HistoryTab::filter() {
+    QString start = startDate->date().toString("yyyy-MM-dd");
+    QString end = endDate->date().toString("yyyy-MM-dd");
+
+    QString str = QString("date(start_time) BETWEEN '%1' AND '%2'")
+                      .arg(start)
+                      .arg(end);
+
+    model->setFilter(str);
+}
+
+void HistoryTab::resetFilter() {
+    model->setFilter("");
+    startDate->setDate(QDate::currentDate());
+    endDate->setDate(QDate::currentDate());
+}
