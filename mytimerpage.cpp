@@ -1,7 +1,4 @@
 #include "mytimerpage.h"
-#include <QWidget>
-#include <QTimer>
-#include <QPushButton>
 #include <QVBoxLayout>
 
 TimerPage::TimerPage(QWidget *parent, bool running_)

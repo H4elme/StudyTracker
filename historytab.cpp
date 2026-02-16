@@ -1,8 +1,5 @@
 #include "historytab.h"
-#include <QListView>
-#include <QSqlTableModel>
 #include <QTableView>
-#include <QSqlQuery>
 #include <QHeaderView>
 #include <QPushButton>
 #include <QVBoxLayout>
@@ -22,7 +19,6 @@ HistoryTab::HistoryTab(QWidget *parent) {
 
     auto view = new QTableView(this);
     view->setModel(model);
-    view->resize(720, 720);
     view->hideColumn(0);
     view->hideColumn(1);
 
@@ -60,7 +56,6 @@ void HistoryTab::refreshDB() {
 
 }
 
-
 QVariant FormattedModel::data(const QModelIndex &idx, int role) const {
     if (idx.column() == 2 && role == Qt::DisplayRole) {
         int curSeconds = QSqlTableModel::data(idx, role).toInt();
@@ -75,15 +70,8 @@ QVariant FormattedModel::data(const QModelIndex &idx, int role) const {
     }
     if (idx.column() == 3 && role == Qt::DisplayRole) {
         QString str = QSqlTableModel::data(idx, role).toString();
-        QString y = str.mid(2, 2);
-        QString m = str.mid(5, 2);
-        QString d = str.mid(8, 2);
-        QString time_ = str.mid(11, 5);
-        str = QString("%1/%2/%3 | %4")
-                  .arg(d)
-                  .arg(m)
-                  .arg(y)
-                  .arg(time_);
+        QDateTime dateTime = QDateTime::fromString(str, "yyyy-MM-dd HH:mm:ss");
+        str = dateTime.toString("dd/MM/yy | HH:mm");
         return str;
     }
     return QSqlTableModel::data(idx, role);

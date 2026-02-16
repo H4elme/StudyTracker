@@ -2,13 +2,8 @@
 #include "historytab.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QSpinBox>
 #include <QPushButton>
-#include <QTimer>
 #include <QDebug>
-#include <QProgressBar>
-#include <QStackedWidget>
-#include <QLabel>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
@@ -18,13 +13,15 @@ MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent)
 {
     initDatabase();
-    this->resize(720, 720);
+    this->setMinimumSize(600, 400);
     auto tabs = new QTabWidget(this);
 
     auto timerTab = new QWidget(this);
     historyTab = new HistoryTab(this);
 
-    auto outer = new QVBoxLayout(this);
+    auto mainLayout = new QVBoxLayout(this);
+
+    auto outer = new QVBoxLayout();
     auto inputPage = new QWidget();
     auto inputLayout = new QVBoxLayout(inputPage);
     auto inputInnerLayout = new QHBoxLayout();
@@ -84,7 +81,9 @@ MainWindow::MainWindow(QWidget *parent)
     timerTab->setLayout(outer);
     tabs->addTab(timerTab, "Timer");
     tabs->addTab(historyTab, "History");
-    tabs->resize(720, 720);
+
+    mainLayout->addWidget(tabs);
+
     connect(this, &MainWindow::timerStopped,
             historyTab, &HistoryTab::refreshDB);
 }
@@ -119,14 +118,16 @@ void MainWindow::update() {
 
 void MainWindow::startMyTimer() {
     totalSeconds = hours->text().toInt() * 3600 + minutes->text().toInt() * 60 + seconds->text().toInt();
-    initialSeconds = totalSeconds;
-    stackedWidget->setCurrentIndex(1);
-    updateTimerLabel();
-    activePage->progressBar->setRange(0, totalSeconds);
-    pausedPage->progressBar->setRange(0, totalSeconds);
-    activePage->progressBar->setValue(totalSeconds);
-    pausedPage->progressBar->setValue(totalSeconds);
-    timer->start(1000);
+    if (totalSeconds > 0) {
+        initialSeconds = totalSeconds;
+        stackedWidget->setCurrentIndex(1);
+        updateTimerLabel();
+        activePage->progressBar->setRange(0, totalSeconds);
+        pausedPage->progressBar->setRange(0, totalSeconds);
+        activePage->progressBar->setValue(totalSeconds);
+        pausedPage->progressBar->setValue(totalSeconds);
+        timer->start(1000);
+    }
 }
 
 void MainWindow::continueMyTimer() {
