@@ -4,6 +4,9 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QLabel>
+#include <QSqlQuery>
+#include <QTime>
 
 HistoryTab::HistoryTab(QWidget *parent) {
 
@@ -32,12 +35,15 @@ HistoryTab::HistoryTab(QWidget *parent) {
     auto filterButton = new QPushButton("Filter");
     auto resetButton = new QPushButton("Reset");
 
+    sumLabel = new QLabel(this);
+
     panel->addWidget(startDate);
     panel->addWidget(endDate);
     panel->addWidget(filterButton);
     panel->addWidget(resetButton);
     layout->addLayout(panel);
     layout->addWidget(view);
+    layout->addWidget(sumLabel);
 
     this->setLayout(layout);
 
@@ -49,11 +55,27 @@ HistoryTab::HistoryTab(QWidget *parent) {
 
     connect(resetButton, &QPushButton::pressed,
             this, &HistoryTab::resetFilter);
+
+    refreshDB();
 }
 
 void HistoryTab::refreshDB() {
     model->select();
+    int s = 0, m = 0, h = 0;
 
+    for (int i = 0; i < model->rowCount(); i++) {
+        QString str;
+        str = model->data(model->index(i, 2)).toString();
+        QTime time = QTime::fromString(str, "HH:mm:ss");
+        s += time.second();
+        m += time.minute();
+        h += time.hour();
+    }
+    QString str = QString("Total time: %1:%2:%3")
+                      .arg(h, 2, 10, '0')
+                      .arg(m, 2, 10, '0')
+                      .arg(s, 2, 10, '0');
+    sumLabel->setText(str);
 }
 
 QVariant FormattedModel::data(const QModelIndex &idx, int role) const {
@@ -87,10 +109,12 @@ void HistoryTab::filter() {
                       .arg(end);
 
     model->setFilter(str);
+    refreshDB();
 }
 
 void HistoryTab::resetFilter() {
     model->setFilter("");
     startDate->setDate(QDate::currentDate());
     endDate->setDate(QDate::currentDate());
+    refreshDB();
 }

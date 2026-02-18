@@ -8,6 +8,7 @@
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QTabWidget>
+#include <QCloseEvent>
 
 MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent)
@@ -62,7 +63,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(activePage->stopButton, &QPushButton::pressed,
             this, &MainWindow::stopMyTimer);
-
     connect(pausedPage->stopButton, &QPushButton::pressed,
             this, &MainWindow::stopMyTimer);
 
@@ -185,4 +185,9 @@ void MainWindow::insertSession(QString type, int duration) {
     if (!query.exec(queryStr)) {
         qDebug() << "Error: can't insert: " << query.lastError().text() << '\n';
     }
+}
+
+void MainWindow::closeEvent(QCloseEvent *event) {
+    stopMyTimer();
+    event->accept();
 }

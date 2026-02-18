@@ -41,7 +41,7 @@ private:
 
     int totalSeconds = 0;
     int initialSeconds = 0;
-
+    void closeEvent(QCloseEvent *event) override;
 signals:
     void timerStopped();
 };

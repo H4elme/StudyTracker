@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QSqlTableModel>
 #include <QDateEdit>
+#include <QLabel>
 
 class HistoryTab : public QWidget
 {
@@ -16,6 +17,7 @@ public:
 private:
     QSqlTableModel *model;
     QDateEdit *startDate, *endDate;
+    QLabel *sumLabel;
 };
 
 class FormattedModel : public QSqlTableModel {
