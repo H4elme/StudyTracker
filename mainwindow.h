@@ -3,11 +3,9 @@
 
 #include "mytimerpage.h"
 #include "historytab.h"
+#include "sessionstable.h"
 #include <QWidget>
 #include <QSpinBox>
-#include <QTimer>
-#include <QProgressBar>
-#include <QLabel>
 #include <QStackedWidget>
 
 class MainWindow : public QWidget
@@ -23,9 +21,6 @@ public:
     void stopMyTimer();
     void continueMyTimer();
     void updateTimerLabel();
-    void initDatabase();
-    void createTable();
-    void insertSession(QString, int);
     ~MainWindow();
 private:
     QSpinBox *seconds;
@@ -42,6 +37,8 @@ private:
     int totalSeconds = 0;
     int initialSeconds = 0;
     void closeEvent(QCloseEvent *event) override;
+
+    SessionsTable *sessions;
 signals:
     void timerStopped();
 };

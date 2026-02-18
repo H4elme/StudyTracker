@@ -1,12 +1,8 @@
 #include "historytab.h"
 #include <QTableView>
 #include <QHeaderView>
-#include <QPushButton>
 #include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QLabel>
-#include <QSqlQuery>
-#include <QTime>
+#include <QPushButton>
 
 HistoryTab::HistoryTab(QWidget *parent) {
 
