@@ -17,6 +17,7 @@ The application allows users to start, pause, and stop timed sessions, automatic
 * Timer logic controlled using Qt signals and slots
 * Database logic is separated into a dedicated SessionTable class that handles table creation and session storage.
 * Session history displayed, sorted and filtered using QSqlTableModel.
+
 The app was intentionally built without Qt Designer to strengthen understanding of programmatic UI construction.
 
 ## Why I built this
