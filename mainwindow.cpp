@@ -100,7 +100,6 @@ void MainWindow::updateTimerLabel() {
 
 void MainWindow::update() {
     if (totalSeconds) {
-        qDebug() << totalSeconds;
         totalSeconds--;
         updateTimerLabel();
         activePage->progressBar->setValue(totalSeconds);

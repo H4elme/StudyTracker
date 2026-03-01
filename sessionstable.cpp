@@ -35,7 +35,6 @@ void SessionsTable::createTable() {
 
 void SessionsTable::insertSession(QString type, int duration) {
     QSqlQuery query;
-    qDebug() << type << ' ' << duration << '\n';
     QString queryStr = QString("INSERT INTO sessions (type, duration)"
                                "VALUES ('%1', %2);")
                            .arg(type)
