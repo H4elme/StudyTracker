@@ -137,11 +137,14 @@ void MainWindow::pauseMyTimer() {
 void MainWindow::stopMyTimer() {
     timer->stop();
     stackedWidget->setCurrentIndex(0);
-    sessions->insertSession("Work", initialSeconds - totalSeconds);
+    if (initialSeconds - totalSeconds > 0) sessions->insertSession("Work", initialSeconds - totalSeconds);
+    initialSeconds = 0;
     emit timerStopped();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
-    stopMyTimer();
+    if (timer->isActive()) {
+        stopMyTimer();
+    }
     event->accept();
 }

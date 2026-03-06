@@ -67,6 +67,10 @@ void HistoryTab::refreshDB() {
         m += time.minute();
         h += time.hour();
     }
+    m += s / 60;
+    s %= 60;
+    h += m / 60;
+    m %= 60;
     QString str = QString("Total time: %1:%2:%3")
                       .arg(h, 2, 10, '0')
                       .arg(m, 2, 10, '0')
